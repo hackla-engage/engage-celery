@@ -1,0 +1,25 @@
+version: "3"
+
+services: 
+  rabbitmq:
+    image: rabbitmq:3.8-rc-alpine
+    env_file: ../engage_celery.env
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"
+  redis:
+    image: redis:5-alpine
+    hostname: redis
+    ports: 
+      - "6379:6379"
+  celery_worker:
+    build: .
+    volumes: 
+      - .:/app
+    links: 
+      - rabbitmq
+      - redis
+    depends_on: 
+      - rabbitmq
+      - redis
+    env_file: ../engage_celery.env

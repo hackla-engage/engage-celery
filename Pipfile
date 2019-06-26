@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+engage-scraper = "*"
+celery = "*"
+redis = "*"
+
+[dev-packages]
+pytest = "*"
+autopep8 = "*"
+pylint = "*"
+
+[requires]
+python_version = "3.6"
