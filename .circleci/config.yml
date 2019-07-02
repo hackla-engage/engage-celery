@@ -16,7 +16,7 @@ jobs:
       - run: 
           name: Check test and upload if succeeded
           command: |
-              scripts/test_and_upload.sh
+              engage_app/scripts/test_and_upload.sh
       - store_test_results:
           path: ~/engage_celery/tmp/test-results
       - store_artifacts:
