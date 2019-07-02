@@ -19,8 +19,6 @@ services:
   celery_worker:
     build: engage_app
     image: hack4laengage/engage_celery:latest
-    volumes: 
-      - ./engage_app:/engage_app
     working_dir: /engage_app
     entrypoint: ./scripts/runworkerstest.sh
     links: 
@@ -37,8 +35,6 @@ services:
   celery_beat:
     build: engage_app
     image: hack4laengage/engage_celery:latest
-    volumes: 
-      - ./engage_app:/engage_app
     working_dir: /engage_app
     entrypoint: ./scripts/runbeats.sh
     links: 

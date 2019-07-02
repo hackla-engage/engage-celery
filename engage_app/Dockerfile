@@ -6,8 +6,11 @@ ENV LIBRARY_PATH=/lib:/usr/lib
 
 ADD . /engage_app/
 WORKDIR /engage_app/
+RUN mkdir /pdfs
 RUN pip install pipenv
 RUN pipenv install --system --deploy
 RUN adduser -D -u 1000 celery
-RUN chown -R celery:celery /engage_app
+RUN chown -R celery:celery /engage_app 
+RUN chown -R celery:celery /pdfs
 USER celery
+RUN ls -l /
