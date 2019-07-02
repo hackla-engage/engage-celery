@@ -10,7 +10,7 @@ jobs:
     steps:
       - checkout
       - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
-      - run: docker-compose build
+      - run: docker-compose -f docker-compose-test.yml build
       # Not using -d since will exit after completion
       # Have to figure out how to shut down redis from entrypoint script
       - run: 
