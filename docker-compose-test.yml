@@ -3,7 +3,9 @@ version: "3"
 services: 
   rabbitmq:
     image: rabbitmq:3.8-rc-alpine
-    env_file: ../engconfig/engage_celery.env
+    environment: 
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=mypass
     hostname: rabbitmq
     ports:
       - "5672:5672"
@@ -16,20 +18,25 @@ services:
       - "6379:6379"
   celery_worker:
     build: engage_app
+    image: hack4laengage/engage_celery:latest
     volumes: 
       - ./engage_app:/engage_app
-      - ../pdfs:/pdfs
     working_dir: /engage_app
-    entrypoint: ./scripts/runworkers.sh
+    entrypoint: ./scripts/runworkerstest.sh
     links: 
       - rabbitmq
       - redis
     depends_on: 
       - rabbitmq
       - redis
-    env_file: ../engconfig/engage_celery.env
+    environment: 
+      - RABBITMQ_URI=admin:mypass@rabbitmq:5672
+      - REDIS_URI=redis:6379
+      - SCHEDULER=tests
+      - TASKS=tests.tasks
   celery_beat:
     build: engage_app
+    image: hack4laengage/engage_celery:latest
     volumes: 
       - ./engage_app:/engage_app
     working_dir: /engage_app
@@ -42,4 +49,8 @@ services:
       - rabbitmq
       - redis
       - celery_worker
-    env_file: ../engconfig/engage_celery.env
+    environment: 
+      - RABBITMQ_URI=admin:mypass@rabbitmq:5672
+      - REDIS_URI=redis:6379
+      - SCHEDULER=tests
+      - TASKS=tests.tasks

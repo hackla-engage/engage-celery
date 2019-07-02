@@ -3,7 +3,7 @@ version: "3"
 services: 
   rabbitmq:
     image: rabbitmq:3.8-rc-alpine
-    env_file: ../engconfig/engage_celery.env
+    env_file: ../engage_celery.env
     hostname: rabbitmq
     ports:
       - "5672:5672"
@@ -15,9 +15,7 @@ services:
     ports: 
       - "6379:6379"
   celery_worker:
-    build: engage_app
-    volumes: 
-      - ./engage_app:/engage_app
+    image: hack4laengage/engage_celery:latest
       - ../pdfs:/pdfs
     working_dir: /engage_app
     entrypoint: ./scripts/runworkers.sh
@@ -27,11 +25,9 @@ services:
     depends_on: 
       - rabbitmq
       - redis
-    env_file: ../engconfig/engage_celery.env
+    env_file: ../engage_celery.env
   celery_beat:
-    build: engage_app
-    volumes: 
-      - ./engage_app:/engage_app
+    image: hack4laengage/engage_celery:latest
     working_dir: /engage_app
     entrypoint: ./scripts/runbeats.sh
     links: 
@@ -42,4 +38,4 @@ services:
       - rabbitmq
       - redis
       - celery_worker
-    env_file: ../engconfig/engage_celery.env
+    env_file: ../engage_celery.env

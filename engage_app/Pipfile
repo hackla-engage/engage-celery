@@ -4,9 +4,16 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-engage-scraper = "*"
+engage-scraper = ">=0.0.18"
+pillow = "*"
 celery = "*"
 redis = "*"
+redisbeat = "*"
+jsonpickle = "*"
+pypdf2 = "*"
+reportlab = "*"
+boto3 = "*"
+celery-once = "*"
 
 [dev-packages]
 pytest = "*"
@@ -14,4 +21,4 @@ autopep8 = "*"
 pylint = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"
