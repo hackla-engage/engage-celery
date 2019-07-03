@@ -1,8 +1,8 @@
 from __future__ import absolute_import
 import os
 from celery import Celery
-from engage_app.santamonica.scheduler import santamonica_scheduler
-from engage_app.tests.scheduler import tests_scheduler
+from santamonica.scheduler import santamonica_scheduler
+from tests.scheduler import tests_scheduler
 import logging
 logging.basicConfig()
 log = logging.getLogger(__name__)
