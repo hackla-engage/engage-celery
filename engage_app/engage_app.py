@@ -1,8 +1,8 @@
 from __future__ import absolute_import
 import os
 from celery import Celery
-from santamonica.scheduler import santamonica_scheduler
-from tests.scheduler import tests_scheduler
+from engage_app.santamonica.scheduler import santamonica_scheduler
+from engage_app.tests.scheduler import tests_scheduler
 import logging
 logging.basicConfig()
 log = logging.getLogger(__name__)
@@ -11,6 +11,7 @@ RABBITMQ_URI = os.getenv('RABBITMQ_URI')
 REDIS_URI = os.getenv("REDIS_URI")
 SCHEDULER = os.getenv("SCHEDULER")
 TASKS = os.getenv("TASKS")
+
 
 app = Celery('engage_app',
              broker='amqp://{}'.format(RABBITMQ_URI),
