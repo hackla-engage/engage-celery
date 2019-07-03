@@ -12,13 +12,13 @@ def santamonica_scheduler(app):
 
     scheduler.add(**{'name': 'scrape',
                     'task': 'santamonica.tasks.scrape_councils',
-                    'schedule': crontab(minute="*/3"), 
+                    'schedule': crontab(minute="*/10"), 
                     'args': ()
                     })
 
     scheduler.add(**{'name': 'pdf',
                     'task': 'santamonica.tasks.process_agenda_to_pdf',
-                    'schedule': crontab(minute="*/3"), 
+                    'schedule': crontab(minute="*/20"), 
                     'args': ()
                     })
 
