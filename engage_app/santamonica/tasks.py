@@ -5,7 +5,7 @@ from celery_once import QueueOnce
 from engage_scraper.scraper_logics.santamonica_scraper_models import Committee, Agenda, AgendaItem
 from engage_scraper.scraper_utils import dbutils
 from engage_scraper.scraper_logics.santamonica_scraper_logic import SantaMonicaScraper
-from process_agenda_to_pdf import write_pdf_for_agenda
+from .process_agenda_to_pdf import write_pdf_for_agenda
 import logging
 
 logging.basicConfig()
