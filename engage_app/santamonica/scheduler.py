@@ -10,7 +10,7 @@ log = logging.getLogger(__name__)
 
 SCRAPE = os.getenv('BEAT_SANTAMONICA_SCRAPE', '*/10')
 PDF = os.getenv('BEAT_SANTAMONICA_PDF', '*/20')
-
+log.error("SCRAPE {} PDF {}".format(SCRAPE, PDF))
 def santamonica_scheduler(app):
     scheduler = RedisScheduler(app=app)
 
