@@ -34,6 +34,6 @@ def send_mail(committee, subject, content, attachment_file_name=None, attachment
             log.error("Could not send an email from {} to {} about {}".format(
                 "do-not-reply@engage.town", committee.email, subject))
             return False
-    except:
-        log.error("Could not send email and threw error")
+    except Exception as exc:
+        log.error("Could not send email and threw error {}".format(str(exrt)))
         return False
