@@ -1,4 +1,4 @@
-version: "3"
+version: "3.7"
 
 services: 
   rabbitmq:
@@ -10,8 +10,11 @@ services:
     logging: 
       driver: "none"
   redis:
+    env_file: ../engconfig/engage_celery.env
     image: redis:5-alpine
     hostname: redis
+    # command: sh -c 'redis-server --requirepass $$REDIS_PASSWORD'
+    command: "sh -c 'printenv REDIS_PASSWORD 2>&1 > ./redis_pass; sed -i \"1s/^/requirepass /\" ./redis_pass; redis-server ./redis_pass'; "
     ports: 
       - "6379:6379"
   celery_worker:

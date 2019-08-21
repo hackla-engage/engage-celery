@@ -10,10 +10,9 @@ celery = "*"
 redis = "*"
 redisbeat = "*"
 jsonpickle = "*"
-pypdf2 = "*"
-reportlab = "*"
 boto3 = "*"
 celery-once = "*"
+simple-latex = "*"
 
 [dev-packages]
 pytest = "*"

@@ -17,6 +17,8 @@ def send_mail(committee, subject, content, attachment_file_name=None, attachment
     msg['From'] = 'do-not-reply@engage.town'
     part = MIMEText(content, 'html')
     msg.attach(part)
+    log.error("HERE!!!")
+    log.error(os.path.isfile(attachment_file_path))
     if attachment_file_path is not None:
         with open(attachment_file_path, 'rb') as f:
             part = MIMEApplication(f.read(), _subtype='pdf')
