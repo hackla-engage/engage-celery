@@ -13,4 +13,3 @@ RUN adduser -D -u 1000 celery
 RUN chown -R celery:celery /engage_app 
 RUN chown -R celery:celery /pdfs
 USER celery
-RUN ls -l /
