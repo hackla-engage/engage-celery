@@ -57,5 +57,12 @@ services:
     environment: 
       - RABBITMQ_URI=admin:mypass@rabbitmq:5672
       - REDIS_URI=redis:6379
+      - REDIS_HOSTNAME=redis
+      - REDIS_PORT=6379
       - SCHEDULER=tests
       - TASKS=tests.tasks
+      - POSTGRES_HOSTNAME=postgres
+      - POSTGRES_USER=someuser
+      - POSTGRES_PASSWORD=somepass
+      - POSTGRES_PORT=5432
+      - REDIS_PASSWORD=somepass

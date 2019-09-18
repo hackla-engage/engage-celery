@@ -1,11 +1,12 @@
 from __future__ import absolute_import
+import logging
+logging.basicConfig()
+log = logging.getLogger(__name__)
+log.error("HERE XXXX")
 import os
 from celery import Celery
 from santamonica.scheduler import santamonica_scheduler
 from tests.scheduler import tests_scheduler
-import logging
-logging.basicConfig()
-log = logging.getLogger(__name__)
 
 RABBITMQ_URI = os.getenv('RABBITMQ_URI')
 REDIS_HOSTNAME = os.getenv("REDIS_HOSTNAME", "redis")
@@ -13,7 +14,7 @@ REDIS_PORT = os.getenv("REDIS_PORT", 6379)
 SCHEDULER = os.getenv("SCHEDULER")
 TASKS = os.getenv("TASKS")
 REDIS_PASSWORD = os.getenv("REDIS_PASSWORD")
-
+log.error('redis://:{}@{}:{}'.format(REDIS_PASSWORD, REDIS_HOSTNAME, REDIS_PORT))
 app = Celery('engage_app',
              broker='amqp://{}'.format(RABBITMQ_URI),
              backend='redis://:{}@{}:{}'.format(REDIS_PASSWORD, REDIS_HOSTNAME, REDIS_PORT),
