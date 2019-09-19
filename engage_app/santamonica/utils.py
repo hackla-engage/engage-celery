@@ -5,8 +5,6 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
 log = logging.Logger(__name__)
-TEST = os.getenv('ENGAGE_TEST', "False") == "True"
-log.error("XXXX {}".format(TEST))
 if not TEST:
     ses_client = boto3.client('ses', aws_access_key_id=os.environ["AWS_ACCESS_KEY_ID"],
                               aws_secret_access_key=os.environ["AWS_SECRET_ACCESS_KEY"],
