@@ -20,6 +20,7 @@ def add_comment(comment, document):
         comment.first_name, comment.last_name), True))
     document.add(Command("textbf", values=["email: "]))
     document.add(Command("href", values=["mailto:{}".format(email_escaped), email_escaped]))
+    document.add(TextClass("", True))
     document.add(Command("textbf", values=["Feedback: "]))
     document.add(TextClass(comment.content if comment.content else "None", True))
     if comment.authcode is None:
