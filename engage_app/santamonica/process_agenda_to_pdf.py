@@ -8,20 +8,24 @@ from simple_latex import Preamble, Package, Documentclass, Definition, Command, 
 logging.basicConfig()
 log = logging.getLogger(__name__)
 
+def escape_email(email):
+    escaped_email = email.replace("_", "\_")
+    return escaped_email
 
 def add_comment(comment, document):
+    email_escaped = escape_email(comment.email)
     document.add(Command("item"))
-    document.add(Command("textbf", values=["Name:"]))
+    document.add(Command("textbf", values=["Name: "]))
     document.add(TextClass("{} {}".format(
         comment.first_name, comment.last_name), True))
-    document.add(Command("textbf", values=["email:"]))
-    document.add(TextClass(comment.email, True))
-    document.add(Command("textbf", values=["Feedback:"]))
+    document.add(Command("textbf", values=["email: "]))
+    document.add(Command("href", values=["mailto:{}".format(email_escaped), email_escaped]))
+    document.add(Command("textbf", values=["Feedback: "]))
     document.add(TextClass(comment.content if comment.content else "None", True))
     if comment.authcode is None:
-        document.add(Command("textbf", values=["Email Authenticated"]))
+        document.add(Command("textit", values=["Email Authenticated"]))
     else:
-        document.add(Command("textbf", values=["Not Authenticated"]))
+        document.add(Command("textit", values=["Email Not Authenticated"]))
     return document
 
 
@@ -213,6 +217,7 @@ def write_pdf_for_agenda(committee, agenda, items, session):
                              "black"], text="No feedback received on this issue.")]))
                 document.add(EndClass("nocommentsbox"))
         sld.add(document)
+        log.error("SLD {}".format(sld))
         sld.pdf(static_root, file_name_tex, clean_output_directory=False, DEBUG=True)
         send_email_pdf(committee, agenda, dateformatted,
                        file_name_pdf, file_path, session)
