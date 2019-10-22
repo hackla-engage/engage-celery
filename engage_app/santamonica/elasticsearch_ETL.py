@@ -69,7 +69,7 @@ def agendaQuery(init=False, index_name=None):
             items = session.query(AgendaItem, AgendaRecommendation)\
                                     .filter(AgendaItem.id==AgendaRecommendation.id)
         
-        for i, item in enumerate(items):
+        for item in items:
             data = {
                     "date": item[0].meeting_time,
                     "agenda_item_id": item[0].agenda_item_id,
