@@ -1,3 +1,4 @@
+from elasticsearch_ETL import loadElasticsearchData
 from __future__ import absolute_import
 from engage_app import app
 from datetime import datetime
@@ -25,6 +26,7 @@ def scrape_councils():
         scraper.scrape()
         log.error("Done scraping {} at {}".format(
             committee.name, datetime.now()))
+    loadElasticsearchData()
 
 
 @app.task(base=QueueOnce, once={'graceful': True})
