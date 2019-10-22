@@ -5,6 +5,7 @@ import time
 from datetime import datetime
 import socket
 import os
+import logging
 
 from engage_scraper.scraper_utils import dbutils
 from engage_scraper.scraper_logics.santamonica_scraper_models import (AgendaItem, Agenda, 
@@ -151,5 +152,3 @@ def loadElasticsearchData():
         return agendaQuery(init=True, index_name='agenda_items')
     else:
         return agendaQuery(index_name='agenda_items')
-
-print(loadElasticsearchData())
