@@ -29,12 +29,8 @@ def getDocumentCount(index_name):
         Return:
             document_count: int, the number of agenda items in the index
     """
-    if dev == "True":
-        url = f'http://postgres:9200/{index_name}/_count'
-        r = requests.get(url)
-    else:
-        url = f'http://es01:9200/{index_name}/_count'
-        r = requests.get(url)
+    url = f'http://es01:9200/{index_name}/_count'
+    r = requests.get(url)
 
     document_count = json.loads(r.text).get('count')
 
@@ -60,7 +56,8 @@ def agendaQuery(init=False, index_name=None):
             es_timestamp = getEsLatestTimestamp(index_name)
 
             if psql_timestamp == es_timestamp:
-                return "All items already in Elasticsearch"
+                print("All items already in Elasticsearch")
+                return True
 
             items = session.query(AgendaItem, AgendaRecommendation)\
                                   .filter(AgendaItem.id==AgendaRecommendation.id)\
@@ -85,13 +82,8 @@ def agendaQuery(init=False, index_name=None):
                     "committee_id": committee_id               
             }
 
-            time.sleep(1)
-            print(f"loading agenda item id {item[0].agenda_item_id}")
-            if dev == "True":
-                requests.post(f"http://postgres:9200/{index_name}/_doc/?pretty",
-                                json=data)
-            else:
-                requests.post(f"http://es01:9200/{index_name}/_doc/?pretty",
+            print(f"loading agenda item id {item[0].agenda_item_id} to elasticsearch")
+            requests.post(f"http://es01:9200/{index_name}/_doc/?pretty",
                                 json=data)
 
         return f"{items.count()} items loaded from PSQL to Elasticsearch in {int(time.time() - start)} seconds"
@@ -134,10 +126,7 @@ def getEsLatestTimestamp(index_name):
                     }
                 }
 
-    if dev == "True":
-        url = f'http://postgres:9200/{index_name}/_search?pretty'
-    else:
-        url = f'http://es01:9200/{index_name}/_search?pretty'
+    url = f'http://es01:9200/{index_name}/_search?pretty'
 
     r = requests.post(url, json=payload)
     response = json.loads(r.text)

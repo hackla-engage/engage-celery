@@ -1,5 +1,5 @@
-from elasticsearch_ETL import loadElasticsearchData
 from __future__ import absolute_import
+from .elasticsearch_ETL import loadElasticsearchData
 from engage_app import app
 from datetime import datetime
 from celery_once import QueueOnce
