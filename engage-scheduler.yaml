@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: engage-scheduler
+  labels:
+    app: engage-scheduler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: engage-scheduler
+  template:
+    metadata:
+      labels:
+        app: engage-scheduler
+    spec:
+      containers:
+      - name: engage-scheduler
+        image: hack4laengage/engage_scheduler:latest
+        env:
+          - name: POSTGRES_HOST
+            valueFrom:
+              secretKeyRef:
+                name: postgres-secrets
+                key: POSTGRES_HOST
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: postgres-secrets
+                key: POSTGRES_USER
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-secrets
+                key: POSTGRES_PASSWORD
+          - name: POSTGRES_PORT
+            valueFrom:
+              secretKeyRef:
+                name: postgres-secrets
+                key: POSTGRES_PORT
+          - name: POSTGRES_DB
+            valueFrom:
+              secretKeyRef:
+                name: postgres-secrets
+                key: POSTGRES_DB
+          - name: ENGAGE_TEST
+            valueFrom:
+              secretKeyRef:
+                name: engage-scheduler-secrets
+                key: ENGAGE_TEST
+          - name: ES_ENABLED
+            valueFrom:
+              secretKeyRef:
+                name: engage-scheduler-secrets
+                key: ES_ENABLED
+          - name: ES_HOSTNAME
+            valueFrom:
+              secretKeyRef:
+                name: elastic-secrets
+                key: ELASTIC_HOSTNAME
+          - name: SANTA_MONICA_PDFS
+            valueFrom:
+              secretKeyRef:
+                name: engage-scheduler-secrets
+                key: SANTA_MONICA_PDFS
+          - name: SANTA_MONICA_SCRAPE
+            valueFrom:
+              secretKeyRef:
+                name: engage-scheduler-secrets
+                key: SANTA_MONICA_SCRAPE
+          - name: ENGAGE_SCHEDULER
+            valueFrom:
+              secretKeyRef:
+                name: engage-scheduler-secrets
+                key: ENGAGE_SCHEDULER
+          - name: TWITTER_ENABLED
+            valueFrom:
+              secretKeyRef:
+                name: engage-scheduler-secrets
+                key: TWITTER_ENABLED
+          - name: TWITTER_CONSUMER_KEY
+            valueFrom:
+              secretKeyRef:
+                name: engage-scheduler-secrets
+                key: TWITTER_CONSUMER_KEY
+          - name: TWITTER_CONSUMER_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: engage-scheduler-secrets
+                key: TWITTER_CONSUMER_SECRET
+          - name: TWITTER_ACCESS_TOKEN_KEY
+            valueFrom:
+              secretKeyRef:
+                name: engage-scheduler-secrets
+                key: TWITTER_ACCESS_TOKEN_KEY
+          - name: TWITTER_ACCESS_TOKEN_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: engage-scheduler-secrets
+                key: TWITTER_ACCESS_TOKEN_SECRET
+          - name: SCRAPER_DEBUG
+            valueFrom:
+              secretKeyRef:
+                name: engage-scheduler-secrets
+                key: SCRAPER_DEBUG
+          - name: SCRAPER_VERBOSE_DEBUG
+            valueFrom:
+              secretKeyRef:
+                name: engage-scheduler-secrets
+                key: SCRAPER_VERBOSE_DEBUG

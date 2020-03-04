@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+engage-scraper = ">=0.0.37"
+pillow = "*"
+jsonpickle = "*"
+boto3 = "*"
+simple-latex = "*"
+schedule = "*"
+google-cloud-storage = "*"
+mailjet-rest = "*"
+
+[dev-packages]
+pytest = "*"
+autopep8 = "*"
+pylint = "*"
+
+[requires]
+python_version = "3.8"

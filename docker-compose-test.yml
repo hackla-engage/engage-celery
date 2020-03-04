@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres
+    environment: 
+      - POSTGRES_USER=someuser
+      - POSTGRES_PASSWORD=somepass
+      - POSTGRES_DB=counciltag
+  engage-app:
+    build: engage_app
+    image: hack4laengage/engage_scheduler:latest
+    links:
+      - postgres
+    depends_on: 
+      - postgres
+    environment: 
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=someuser
+      - POSTGRES_PASSWORD=somepass
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=counciltag
+      - ENGAGE_TEST=True
+      - ES_ENABLED=False
+      - TWITTER_ENABLED=False
+      - ENGAGE_SCHEDULER=santamonica.scheduler
+      - SANTA_MONICA_PDFS=12:05
+      - SANTA_MONICA_SCRAPE=5
