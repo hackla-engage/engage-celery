@@ -17,11 +17,11 @@ def scrape_councils():
     # Make sure you have set the POSTGRES_URI and POSTGRES_DB env variables
     log.info("running task: scrape councils")
     session = Session()
-    scraper = SantaMonicaScraper()
+    scraper = SantaMonicaScraper(years=['2020', '2019'])
     i = 0
     for committee in session.query(Committee):
         i += 1
-        scraper.set_committee("Santa Monica City Council")
+        scraper.set_committee(committee.name)
         scraper.get_available_agendas()
         scraper.scrape()
         log.error("Done scraping {} at {}".format(
@@ -36,7 +36,6 @@ def scrape_councils():
                               ))
         session.commit()
         for committee in session.query(Committee):
-            scraper = SantaMonicaScraper()
             scraper.set_committee(committee.name)
             scraper.get_available_agendas()
             scraper.scrape()

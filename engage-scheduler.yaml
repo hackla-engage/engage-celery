@@ -108,3 +108,13 @@ spec:
               secretKeyRef:
                 name: engage-scheduler-secrets
                 key: SCRAPER_VERBOSE_DEBUG
+          - name: MJ_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: engage-scheduler-secrets
+                key: MJ_API_KEY
+          - name: MJ_API_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: engage-scheduler-secrets
+                key: MJ_API_SECRET

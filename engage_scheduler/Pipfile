@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-engage-scraper = ">=0.0.37"
+engage-scraper = ">=0.0.41"
 pillow = "*"
 jsonpickle = "*"
 boto3 = "*"
