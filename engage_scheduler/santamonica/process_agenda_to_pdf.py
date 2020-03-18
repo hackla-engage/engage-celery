@@ -1,6 +1,7 @@
 import os
 import pytz
 import logging
+import boto3
 from datetime import datetime
 from engage_scraper.scraper_logics.santamonica_scraper_models import Message, AgendaItem
 from .utils import send_mail
@@ -8,10 +9,18 @@ from simple_latex import Preamble, Package, Documentclass, Definition, Command, 
 from google.cloud import storage
 logging.basicConfig()
 log = logging.getLogger(__name__)
+S3_ENABLED = os.getenv("S3_ENABLED", "False") == "True"
+if S3_ENABLED:
+    region = "us-west-2"
+    s3 = boto3.client('s3',
+                        aws_access_key_id=os.getenv("S3_access_key_ID"),
+                        aws_secret_access_key=os.getenv("S3_secret_access_key"),
+                        region_name=region)
 
 def escape_email(email):
     escaped_email = email.replace("_", "\_")
     return escaped_email
+
 
 def add_comment(comment, document):
     email_escaped = escape_email(comment.email)
@@ -20,10 +29,12 @@ def add_comment(comment, document):
     document.add(TextClass("{} {}".format(
         comment.first_name, comment.last_name), True))
     document.add(Command("textbf", values=["email: "]))
-    document.add(Command("href", values=["mailto:{}".format(email_escaped), email_escaped]))
+    document.add(
+        Command("href", values=["mailto:{}".format(email_escaped), email_escaped]))
     document.add(TextClass("", True))
     document.add(Command("textbf", values=["Feedback: "]))
-    document.add(TextClass(comment.content if comment.content else "None", True))
+    document.add(
+        TextClass(comment.content if comment.content else "None", True))
     if comment.authcode is None:
         document.add(Command("textit", values=["Email Authenticated"]))
     else:
@@ -69,7 +80,7 @@ def send_email_pdf(committee, agenda, subtitle_date, file_name, file_path, sessi
         committee.name, agenda.meeting_id, subtitle_date)
     send_mail(committee, subject, email_body, file_name, file_path)
     agenda.processed = True
-    agenda.pdf_location = f"https://storage.googleapis.com/engagepdfs/{file_name}"
+    agenda.pdf_location = f"https://engagepdfs.s3-us-west-2.amazonaws.com/{file_name}"
     session.commit()
 
 
@@ -91,7 +102,7 @@ def write_pdf_for_agenda(committee, agenda, items, session):
         preamble = Preamble()
         document = Document()
         dateformatted = "{} {}, {}".format(datetime_local.strftime("%B"),
-                                          datetime_local.day, datetime_local.year)
+                                           datetime_local.day, datetime_local.year)
         title = "Feedback on Items for {} on {}".format(
             committee.name, dateformatted)
         preamble = Preamble(title,
@@ -136,7 +147,7 @@ def write_pdf_for_agenda(committee, agenda, items, session):
                              parameters={"display": None},
                              values=["\\normalfont\\huge\\bfseries", "", "0pt", "\\Huge"], escapeValues=False, escapeText=False))
         preamble.add(Command("titlespacing", "\\chapter", values=[
-            "0pt", "-30pt", "20pt"], starred=True,escapeValues=False, escapeText=False))
+            "0pt", "-30pt", "20pt"], starred=True, escapeValues=False, escapeText=False))
         preamble.add(Command("pagestyle", values=["fancy"]))
         preamble.add(Command("fancyhf", values=[""]))
         preamble.add(RenewCommand("familydefault", "\\sfdefault"))
@@ -219,12 +230,14 @@ def write_pdf_for_agenda(committee, agenda, items, session):
                              "black"], text="No feedback received on this issue.")]))
                 document.add(EndClass("nocommentsbox"))
         sld.add(document)
-        sld.pdf(static_root, file_name_tex, clean_output_directory=True, DEBUG=True)
+        sld.pdf(static_root, file_name_tex,
+                clean_output_directory=True, DEBUG=True)
         # upload file_name_pdf to google bucket
-        storage_client = storage.Client()
-        bucket = storage_client.bucket('engagepdfs')
-        blob = bucket.blob(file_name_pdf)
-        blob.upload_from_filename(file_path)
+        try:
+            s3.upload_file(file_path, "engagepdfs", file_name_pdf)
+            log.error(f"Uploaded {file_name_pdf}")
+        except:
+            log.error(f"Could not upload {file_name_pdf}")
         send_email_pdf(committee, agenda, dateformatted,
                        file_name_pdf, file_path, session)
     except Exception as exc:

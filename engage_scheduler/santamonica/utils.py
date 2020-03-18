@@ -35,11 +35,12 @@ def send_mail(committee, subject, content, attachment_file_name=None, attachment
                     "Attachments": [{
                         "Filename": attachment_file_name,
                         "ContentType": "application/pdf",
-                        "Base64Content": b64data
+                        "Base64Content": b64data.decode("ascii")
                     }]
                 }
             ]
         }
+        log.error("SENDIMG EMAIL")
         result = mailjet.send.create(data=data)
         if result.status_code > 300:
             return False

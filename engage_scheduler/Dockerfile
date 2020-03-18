@@ -1,6 +1,6 @@
 FROM python:3-slim
 # A side effect of using alpine is you must build psycopg2 from source
-RUN apt-get update && apt-get upgrade -y && apt-get install -y gcc g++ make postgresql-contrib texlive-latex-base texlive-latex-recommended
+RUN apt-get update && apt-get upgrade -y && apt-get install -y gcc g++ make postgresql-contrib texlive-latex-base texlive-latex-recommended texlive-latex-extra latexmk
 ENV LIBRARY_PATH=/lib:/usr/lib
 ADD . /engage_scheduler
 WORKDIR /engage_scheduler

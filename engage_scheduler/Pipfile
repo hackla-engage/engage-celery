@@ -12,6 +12,7 @@ simple-latex = "*"
 schedule = "*"
 google-cloud-storage = "*"
 mailjet-rest = "*"
+pylatex = "*"
 
 [dev-packages]
 pytest = "*"
